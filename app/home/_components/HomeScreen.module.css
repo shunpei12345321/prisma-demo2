@@ -1,0 +1,40 @@
+.container {
+    padding : 20px
+   }
+   .userTable {
+    width: 100%;
+    border-collapse: collapse; 
+    margin-top: 1rem; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px; 
+    overflow: hidden; 
+    }
+    .userTable thead {
+    background-color: #F2F2F2; 
+    font-weight: bold;
+    text-align: left;
+    }
+    .userTable th,
+    .userTable td {
+    padding: 0.75rem; 
+    border-bottom: 1px solid #ddd; 
+    }
+
+    .userTable tbody tr:nth-child(even) {
+        background-color: #F9F9F9; 
+        }
+        .userTable tbody tr:hover {
+        background-color: #E9E9E9; 
+        transition: background-color 0.2s ease-in-out; 
+        }
+        .userId {
+        width: 15%; 
+        text-align: center; 
+        }
+        .userName {
+        width: 35%; 
+        }
+        .userEmail {
+        width: 60%; 
+        }
+       
