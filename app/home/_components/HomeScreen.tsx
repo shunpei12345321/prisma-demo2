@@ -1,6 +1,8 @@
 "use client";
+import Link from "next/link";
 import { User } from "../../_repositories/User";
 import styles from "./HomeScreen.module.css";
+
 
 type Props = {
   users: User[];
@@ -10,6 +12,9 @@ export default function HomeScreen({ users }: Props) {
   return (
     <div className={styles.container}>
       <h2 className="text-xl font-bold mb-4">ユーザーリスト</h2>
+      <Link href="/create" className="text-blue-500 underline mb-4 block">
+  ＋ 新規ユーザー作成
+</Link>
       <table className={`table-auto ${styles.userTable}`}>
         <thead>
           <tr>
