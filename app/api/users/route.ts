@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 // app/api/users/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../lib/prisma"; // こちらもエイリアス or 相対パスに注意
+// import prisma from "../../lib/prisma"; // こちらもエイリアス or 相対パスに注意
 import { UserRepository } from "@/app/_repositories/User";
 
 export async function GET(req: NextRequest, context: any) {

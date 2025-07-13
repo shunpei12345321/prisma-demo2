@@ -15,7 +15,7 @@ export namespace UserRepository {
   export async function findMany(): Promise<User[]> {
     return await prisma.user.findMany({
       orderBy: {
-        id: "asc",
+        id: "desc",
       },
     });
   }
@@ -45,6 +45,12 @@ export namespace UserRepository {
     return await prisma.user.update({
       where: { id },
       data,
+    });
+  }
+
+  export async function deleteById(id: number): Promise<User> {
+    return await prisma.user.delete({
+      where: { id },
     });
   }
 }

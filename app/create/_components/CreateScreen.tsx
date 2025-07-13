@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import styles from "./CreateScreen.module.css";
 
 export default function CreateScreen() {
   const [name, setName] = useState("");
@@ -23,30 +24,48 @@ export default function CreateScreen() {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">ユーザー作成</h1>
-      <div className="mb-4">
+    <div className={styles.container}>
+      <button onClick={() => router.back()} className={styles.backButton}>
+        戻る
+      </button>
+
+      <form
+        className={styles.formWrapper}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleCreateUser();
+        }}
+      >
+        <h1 className={styles.title}>ユーザー作成</h1>
+        <label className={styles.label} htmlFor="name-input">
+          名前
+        </label>
+
         <input
+          id="name-input"
           type="text"
           placeholder="名前"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="border p-2 mr-2"
+          className={styles.input}
+          required
         />
+        <label className={styles.label} htmlFor="email-input">
+          メールアドレス
+        </label>
         <input
           type="email"
           placeholder="メールアドレス"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 mr-2"
+          className={styles.input}
+          required
         />
-        <button
-          onClick={handleCreateUser}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
+
+        <button type="submit" className={styles.createButton}>
           作成
         </button>
-      </div>
+      </form>
     </div>
   );
 }

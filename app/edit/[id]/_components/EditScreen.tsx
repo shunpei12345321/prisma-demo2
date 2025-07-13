@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import styles from "./EditScreen.module.css";
 
 type Props = {
   userId: number;
@@ -39,26 +40,52 @@ export default function EditScreen({ userId }: Props) {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">ユーザー編集</h1>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="border p-2 mr-2"
-      />
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="border p-2 mr-2"
-      />
-      <button
-        onClick={handleUpdateUser}
-        className="bg-green-500 text-white px-4 py-2 rounded"
-      >
-        更新
+    <div className={styles.container}>
+      {/* 左上の戻るボタン */}
+      <button onClick={() => router.back()} className={styles.backButton}>
+        戻る
       </button>
+
+      {/* 中央のフォーム */}
+      <form
+        className={styles.formWrapper}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleUpdateUser();
+        }}
+      >
+        <h1 className={styles.title}>ユーザー編集</h1>
+        <label className={styles.labelId}>ユーザーID: {userId}</label>
+
+        <label className={styles.label} htmlFor="name-input">
+          名前
+        </label>
+        <input
+          id="name-input"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="名前"
+          className={styles.input}
+          required
+        />
+        <label className={styles.label} htmlFor="email-input">
+          メールアドレス
+        </label>
+        <input
+          id="email-input"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="メールアドレス"
+          className={styles.input}
+          required
+        />
+
+        <button type="submit" className={styles.updateButton}>
+          更新
+        </button>
+      </form>
     </div>
   );
 }

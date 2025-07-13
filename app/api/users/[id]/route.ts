@@ -1,13 +1,14 @@
 export const dynamic = "force-dynamic";
+// $ npx @next/codemod@canary next-async-request-api .
+// このコマンドを実行すると、API ルートが async/await 構文を使用するように変換されます。
 
 import { NextRequest, NextResponse } from "next/server";
 import { UserRepository } from "@/app/_repositories/User";
-import prisma from "../../../lib/prisma";
-// ユーザー取得（編集用）
-// 動的ルーティングを使用して、ユーザーIDを取得
 
+// GET（ユーザー取得）
 export async function GET(_req: NextRequest, context: any) {
-  const id = Number(context.params.id);
+  const params = await context.params;
+  const id = Number(params.id);
   const user = await UserRepository.findUnique(id);
 
   if (!user) {
@@ -17,46 +18,10 @@ export async function GET(_req: NextRequest, context: any) {
   return NextResponse.json(user, { status: 200 });
 }
 
-// export async function GET(
-//   req: NextRequest,
-//   context: { params: { id: string } }
-// ) {
-//   const id = Number(context.params.id);
-//   const user = await UserRepository.findUnique(id);
-
-//   if (!user) {
-//     return NextResponse.json({ error: "User not found" }, { status: 404 });
-//   }
-
-//   return NextResponse.json(user);
-// }
-
-// ユーザー更新（PUT）
-// export async function PUT(
-//   req: NextRequest,
-//   { params }: { params: { id: string } }
-// ) {
-//   const id = Number(params.id);
-//   const { name, email } = await req.json();
-
-//   if (!name || !email) {
-//     return NextResponse.json(
-//       { error: "名前とメールが必要です" },
-//       { status: 400 }
-//     );
-//   }
-
-//   try {
-//     const updated = await UserRepository.update(id, { name, email });
-//     return NextResponse.json(updated, { status: 200 });
-//   } catch (e) {
-//     console.error(e);
-//     return NextResponse.json({ error: "更新に失敗しました" }, { status: 500 });
-//   }
-// }
-
+// PUT（ユーザー更新）
 export async function PUT(req: NextRequest, context: any) {
-  const id = Number(context.params.id);
+  const params = await context.params;
+  const id = Number(params.id);
   const { name, email } = await req.json();
 
   if (!name || !email) {
@@ -75,10 +40,9 @@ export async function PUT(req: NextRequest, context: any) {
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+// DELETE（ユーザー削除）
+export async function DELETE(_req: NextRequest, context: any) {
+  const params = await context.params;
   const id = Number(params.id);
 
   if (isNaN(id)) {
@@ -86,12 +50,10 @@ export async function DELETE(
   }
 
   try {
-    await prisma.user.delete({
-      where: { id },
-    });
-    return NextResponse.json({ message: "User deleted" }, { status: 200 });
-  } catch (e) {
-    console.error("DELETE error:", e);
+    const deletedUser = await UserRepository.deleteById(id);
+    return NextResponse.json(deletedUser, { status: 200 });
+  } catch (error) {
+    console.error("DELETE error:", error);
     return NextResponse.json({ error: "削除に失敗しました" }, { status: 500 });
   }
 }
