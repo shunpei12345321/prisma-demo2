@@ -2,7 +2,7 @@
 import { prisma } from "../_utils/prismaSingleton";
 import { User as PrismaUser } from "@prisma/client";
 
-// eslintnosettei fairu wo kaeru ka 
+// eslintnosettei fairu wo kaeru ka
 //or file change
 // eslintnosettei fairu wo kaeru ka
 //or file change
@@ -10,9 +10,14 @@ import { User as PrismaUser } from "@prisma/client";
 //ESlint拡張させるか.eslint設定ファイルをchangeしてするかです。
 
 export type User = PrismaUser;
+
 export namespace UserRepository {
   export async function findMany(): Promise<User[]> {
-    return await prisma.user.findMany();
+    return await prisma.user.findMany({
+      orderBy: {
+        id: "asc",
+      },
+    });
   }
 
   export async function findUnique(userId: number): Promise<User | null> {
@@ -20,6 +25,26 @@ export namespace UserRepository {
       where: {
         id: userId,
       },
+    });
+  }
+
+  export async function create(params: {
+    name: string;
+    email: string;
+  }): Promise<User> {
+    const { name, email } = params;
+    return await prisma.user.create({
+      data: { name, email },
+    });
+  }
+
+  export async function update(
+    id: number,
+    data: { name: string; email: string }
+  ): Promise<User> {
+    return await prisma.user.update({
+      where: { id },
+      data,
     });
   }
 }

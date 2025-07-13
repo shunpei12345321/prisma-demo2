@@ -1,15 +1,18 @@
+export const dynamic = "force-dynamic";
 // app/api/users/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import prisma  from "../../lib/prisma"; // こちらもエイリアス or 相対パスに注意
+import prisma from "../../lib/prisma"; // こちらもエイリアス or 相対パスに注意
+import { UserRepository } from "@/app/_repositories/User";
 
-export async function GET() {
-  try {
-    const users = await prisma.user.findMany();
-    return NextResponse.json(users, { status: 200 });
-  } catch (error) {
-    console.error("GET /api/users error:", error);
-    return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
+export async function GET(req: NextRequest, context: any) {
+  const id = Number(context.params.id);
+  const user = await UserRepository.findUnique(id);
+
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
+
+  return NextResponse.json(user);
 }
 
 export async function POST(req: NextRequest) {
@@ -17,40 +20,19 @@ export async function POST(req: NextRequest) {
     const { name, email } = await req.json();
 
     if (!name || !email) {
-      return NextResponse.json({ error: "名前とメールが必要です" }, { status: 400 });
+      return NextResponse.json(
+        { error: "名前とメールが必要です" },
+        { status: 400 }
+      );
     }
 
-    const user = await prisma.user.create({
-      data: { name, email },
-    });
-
+    const user = await UserRepository.create({ name, email });
     return NextResponse.json(user, { status: 201 });
   } catch (error) {
     console.error("POST /api/users error:", error);
-    return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to create user" },
+      { status: 500 }
+    );
   }
 }
-
-
-
-// app/api/users/route.ts
-// import type { NextApiRequest, NextApiResponse } from "next";
-// import prisma from "../../lib/prisma";
-
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse
-// ) {
-//   if (req.method === "GET") {
-//     try {
-//       const users = await prisma.user.findMany();
-//       res.status(200).json(users);
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: "Failed to fetch users" });
-//     }
-//   } else {
-//     res.status(405).json({ error: "Method not allowed" });
-//   }
-// }
-
