@@ -4,15 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 // import prisma from "../../lib/prisma"; // こちらもエイリアス or 相対パスに注意
 import { UserRepository } from "@/app/_repositories/User";
 
-export async function GET(req: NextRequest, context: any) {
-  const id = Number(context.params.id);
-  const user = await UserRepository.findUnique(id);
-
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
-
-  return NextResponse.json(user);
+export async function GET(req: NextRequest) {
+  const users = await UserRepository.findMany(); 
+  return NextResponse.json(users);
 }
 
 export async function POST(req: NextRequest) {
