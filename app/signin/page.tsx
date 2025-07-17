@@ -19,8 +19,10 @@ export default function SignInPage() {
 		if (urlHasCode) {
 			const checkSession = async () => {
 				// 1秒くらい待つと cookie が反映されやすい
-				await new Promise((r) => setTimeout(r, 1000));
+				console.log("🔍 Checking session from magic link...");
+				// ログ確認
 
+				await new Promise((r) => setTimeout(r, 1500));
 				const {
 					data: { session },
 				} = await supabase.auth.getSession();
