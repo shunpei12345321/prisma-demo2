@@ -1,3 +1,5 @@
+// home pages
+
 "use client";
 
 import { useEffect, useState } from "react";

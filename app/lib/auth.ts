@@ -6,7 +6,9 @@ export const getOrCreateUser = async () => {
 	const session = await getSupabaseSession();
 	const supabaseUser = session?.user;
 
-	if (!supabaseUser?.id || !supabaseUser.email) throw new Error("未ログイン");
+	if (!supabaseUser?.id || !supabaseUser.email) {
+		throw new Error("未ログイン");
+	}
 
 	let user = await prisma.user.findUnique({
 		where: { email: supabaseUser.email },
@@ -17,7 +19,6 @@ export const getOrCreateUser = async () => {
 			data: {
 				email: supabaseUser.email,
 				name: supabaseUser.user_metadata?.name ?? null,
-				// supabaseId: supabaseUser.id, // 任意で追加
 			},
 		});
 	}
